@@ -1,5 +1,6 @@
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.masty.util.FileUtil;
 
@@ -111,11 +112,10 @@ public class TestDataGeneratorTest {
         file2.delete();
     }
 
-    @Test
+    @Ignore
     public void testMillionsOfHexIps() {
         long start, stop, time;
-//        int[] testCount = {1_000_000, 2_000_000, 5_000_000, 10_000_000};
-        int[] testCount = {1000, 2000, 5000, 10000, 100000, 1_000_000};
+        int[] testCount = {1_000_000, 2_000_000, 5_000_000, 10_000_000};
         String[][] allargs = {{"count="},
                 {"count=", "decimalIp=true"},
                 {"count=", "decimalIp=true", "binaryIp=true"}};

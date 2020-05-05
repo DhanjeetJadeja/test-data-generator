@@ -5,8 +5,8 @@ Test data determines to Quality of Tests, Environments, Products, Services and P
 
 This works like below
 
-```$xslt
-Dhanjeets-MacBook-Pro:tdg jadejad$ java -jar test-data-generator-1.0.jar from=192 to=255 count=10 index=true
+```
+$ java -jar test-data-generator-1.0.jar from=192 to=255 count=10 index=true
 Reading properties from tdg.properties
 ~~ Success ~~ !!
 Test Data Generator generated 10 IPs in tdg-op-1588717553131.csv taking 49 ms
@@ -28,7 +28,7 @@ $ cat tdg-op-1588717553131.csv
 ```
 
 ## Lets see the configurable flags in the properties
-###finerIps=false from and to 
+**_finerIps=false from and to_** 
 ```
 #
 #finerIps=false - This will generate count ips from 10.10.10.10 to 200.200.200.200
@@ -39,7 +39,7 @@ to=200
 #200.200.200.200
 #
 ```
-###finerIps=true from.octet and to.octet
+**_finerIps=true from.octet and to.octet_**
 ```
 #finerIps=true - This will generate count ips from 192.168.1.1 to 192.168.254.254
 finerIps=true
@@ -53,7 +53,7 @@ to.third=254
 to.fourth=254
 #
 ```
-###count
+**_count_**
 ```
 #count=1000000 - Attempt 1000000 IPs but if the from[.octet] through to to[.octet]
 ```
