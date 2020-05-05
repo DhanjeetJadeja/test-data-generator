@@ -6,86 +6,84 @@ import java.util.Map;
 import java.util.Properties;
 
 public class TestDataGenerator {
-    public static void main(String[] args) {
-        Map<String, String> arguments = FileUtil.arguments(args);
-        Properties prop;
+    static List<String> ips;
 
-        String confFile = arguments.get("config") != null ? arguments.get("config") : "tdg.properties";
-        prop = FileUtil.readProperties(confFile);
-        List<String> ips = new ArrayList<>();
-        int count = 1;
+    public static void main(String[] args) {
+        TestDataGenerator tdg = new TestDataGenerator();
+        long start = System.currentTimeMillis(), stop;
+        String fileName = tdg.generateFlatFile(args);
+        stop = System.currentTimeMillis();
+        System.out.println("~~ Success ~~ !!");
+        System.out.println("Test Data Generator generated " + ips.size() + " IPs in " + fileName + " taking " + (stop - start) + " ms");
+    }
+
+    public String generateFlatFile(String... args) {
+        ips = new ArrayList<>();
+        Map<String, String> arguments = FileUtil.arguments(args);
+        short[] from = new short[4];
+        short[] to = new short[4];
+        short i, j, k, l;
+        Properties prop = new Properties();
+        String confFile = resolveStringArgument(arguments, prop, "config", "tdg.properties");
+        if (null == prop) prop = FileUtil.readProperties(confFile);
+
+        String[] octets = {"first", "second", "third", "fourth"};
+        short defaultFrom = 1, defaultTo = 254;
+        String defaultDelimiter = ":";
+        int count = defaultFrom;
 
         String c = "", line = "", ipDecimal = "", ipHex = "", ipBinary = "";
-        String first, second, third, fourth;
-        int from = arguments.get("from") != null ? Integer.parseInt(arguments.get("from")) :
-                prop.getProperty("from") != null ? Integer.parseInt(prop.getProperty("from")) : 1;
-        int to = arguments.get("to") != null ? Integer.parseInt(arguments.get("to")) :
-                prop.getProperty("to") != null ? Integer.parseInt(prop.getProperty("to")) : 254;
+        boolean finerIps = arguments.get("finerIps") != null ? Boolean.parseBoolean(arguments.get("finerIps")) :
+                prop.getProperty("finerIps") != null && Boolean.parseBoolean(prop.getProperty("finerIps"));
 
-        long start, stop;
+        int ROW_COUNT = resolveIntegerArgument(arguments, prop, "count", 1_000_000);
+        String delimiter = resolveStringArgument(arguments, prop, "delimiter", defaultDelimiter);
 
-        int ROW_COUNT = arguments.get("count") != null ? Integer.parseInt(arguments.get("count")) :
-                prop.getProperty("count") != null ? Integer.parseInt(prop.getProperty("count")) : 1_000_000;
+        if (finerIps) {
+            short counter = 0;
+            for (String position : octets) {
+                from[counter] = resolveShortArgument(arguments, prop, "from." + position, defaultFrom);
+                to[counter++] = resolveShortArgument(arguments, prop, "to." + position, defaultFrom);
+            }
+        } else {
+            short fromAll = resolveShortArgument(arguments, prop, "from", defaultFrom);
+            short toAll = resolveShortArgument(arguments, prop, "to", defaultTo);
+            for (i = 0; i < 4; i++) {
+                from[i] = fromAll;
+                to[i] = toAll;
+            }
+        }
 
-        boolean index = arguments.get("index") != null ? Boolean.parseBoolean(arguments.get("index")) :
-                prop.getProperty("index") != null ? Boolean.parseBoolean(prop.getProperty("index")) : false;
+        boolean index = resolveBooleanArgument(arguments, prop, "index", false);
+        boolean decimalIp = resolveBooleanArgument(arguments, prop, "decimalIp", false);
+        boolean hexIp = resolveBooleanArgument(arguments, prop, "hexIp", true);
+        boolean binaryIp = resolveBooleanArgument(arguments, prop, "binaryIp", false);
 
-        boolean decimalIp = arguments.get("decimalIp") != null ? Boolean.parseBoolean(arguments.get("decimalIp")) :
-                prop.getProperty("decimalIp") != null ? Boolean.parseBoolean(prop.getProperty("decimalIp")) : false;
-
-        boolean hexIp = arguments.get("hexIp") != null ? Boolean.parseBoolean(arguments.get("hexIp")) :
-                prop.getProperty("hexIp") != null ? Boolean.parseBoolean(prop.getProperty("hexIp")) : false;
-
-        boolean binaryIp = arguments.get("binaryIp") != null ? Boolean.parseBoolean(arguments.get("binaryIp")) :
-                prop.getProperty("binaryIp") != null ? Boolean.parseBoolean(prop.getProperty("binaryIp")) : false;
-
-        start = System.currentTimeMillis();
-        for (int i = from; i <= to; i++) {
-            for (int j = from; j <= to; j++) {
-                for (int k = from; k <= to; k++) {
-                    for (int l = from; l <= to; l++) {
+        for (i = from[0]; i <= to[0]; i++) {
+            for (j = from[1]; j <= to[1]; j++) {
+                for (k = from[2]; k <= to[2]; k++) {
+                    for (l = from[3]; l <= to[3]; l++) {
                         if (count <= ROW_COUNT) {
                             line = "";
                             if (index) {
                                 c = String.format("%08d", count++);
-                                line = c + ",";
+                                line = c + delimiter;
                             } else {
                                 count++;
                             }
                             if (decimalIp) {
-                                ipDecimal = String.format("%02d", i)
-                                        + "." + String.format("%02d", j)
-                                        + "." + String.format("%02d", k)
-                                        + "." + String.format("%02d", l);
-                                line = line + ipDecimal + ",";
+                                ipDecimal = getDecimalIp(i, j, k, l);
+                                line = line + ipDecimal + delimiter;
                             }
                             if (hexIp) {
-                                first = Integer.toHexString(i);
-                                second = Integer.toHexString(j);
-                                third = Integer.toHexString(k);
-                                fourth = Integer.toHexString(l);
-
-                                first = first.length() == 1 ? "0" + first : first;
-                                second = second.length() == 1 ? "0" + second : second;
-                                third = third.length() == 1 ? "0" + third : third;
-                                fourth = fourth.length() == 1 ? "0" + fourth : fourth;
-
-                                ipHex = first + second + third + fourth;
-                                line = line + ipHex + ",";
+                                ipHex = getHexIp(i, j, k, l);
+                                line = line + ipHex + delimiter;
                             }
                             if (binaryIp) {
-                                first = Integer.toBinaryString(i);
-                                second = Integer.toBinaryString(j);
-                                third = Integer.toBinaryString(k);
-                                fourth = Integer.toBinaryString(l);
-
-                                ipBinary = String.format("%16s", first)
-                                        + "." + String.format("%16s", second)
-                                        + "." + String.format("%16s", third)
-                                        + "." + String.format("%16s", fourth);
-                                line = line + ipBinary + ",";
+                                ipBinary = getBinaryIp(i, j, k, l);
+                                line = line + ipBinary + delimiter;
                             }
-                            line = line + "\n";
+                            line = line.substring(0, line.length() - delimiter.length()) + "\n";
                             ips.add(line);
                         } else {
                             break;
@@ -94,9 +92,61 @@ public class TestDataGenerator {
                 }
             }
         }
-        stop = System.currentTimeMillis();
-        String fileName = "ips-UnIverse-" + stop + ".csv";
+
+        String fileName = "tdg-op-" + System.currentTimeMillis() + ".csv";
         FileUtil.write(fileName, ips);
-        System.out.println("~~ Success ~~ !! wrote " + ips.size() + " IPs in " + fileName + " taking " + (stop - start) + " ms");
+        return fileName;
+    }
+
+    public int resolveIntegerArgument(Map<String, String> arguments, Properties prop, String key, int defaultValue) {
+        return arguments.get(key) == null ? prop.getProperty(key) == null ? defaultValue : Integer.parseInt(prop.getProperty(key)) : Integer.parseInt(arguments.get(key));
+    }
+
+    public String resolveStringArgument(Map<String, String> arguments, Properties prop, String key,
+                                        String defaultValue) {
+        return arguments.get(key) == null ? prop.getProperty(key) == null ? defaultValue : prop.getProperty(key) : arguments.get(key);
+    }
+
+    public short resolveShortArgument(Map<String, String> arguments, Properties prop, String key, short defaultValue) {
+        return arguments.get(key) == null ? prop.getProperty(key) == null ? defaultValue : Short.parseShort(prop.getProperty(key)) : Short.parseShort(arguments.get(key));
+    }
+
+    public boolean resolveBooleanArgument(Map<String, String> arguments, Properties prop, String key, boolean defaultValue) {
+        return arguments.get(key) == null ? prop.getProperty(key) == null ? defaultValue : Boolean.parseBoolean(prop.getProperty(key)) : Boolean.parseBoolean(arguments.get(key));
+    }
+
+    public String getBinaryIp(short i, short j, short k, short l) {
+        String first, second, third, fourth;
+        first = Integer.toBinaryString(i);
+        second = Integer.toBinaryString(j);
+        third = Integer.toBinaryString(k);
+        fourth = Integer.toBinaryString(l);
+
+        return String.format("%16s", first)
+                + "." + String.format("%16s", second)
+                + "." + String.format("%16s", third)
+                + "." + String.format("%16s", fourth);
+    }
+
+    public String getHexIp(short i, short j, short k, short l) {
+        String first, second, third, fourth;
+        first = Integer.toHexString(i);
+        second = Integer.toHexString(j);
+        third = Integer.toHexString(k);
+        fourth = Integer.toHexString(l);
+
+        first = first.length() == 1 ? "0" + first : first;
+        second = second.length() == 1 ? "0" + second : second;
+        third = third.length() == 1 ? "0" + third : third;
+        fourth = fourth.length() == 1 ? "0" + fourth : fourth;
+
+        return first + second + third + fourth;
+    }
+
+    public String getDecimalIp(short i, short j, short k, short l) {
+        return i
+                + "." + j
+                + "." + k
+                + "." + l;
     }
 }

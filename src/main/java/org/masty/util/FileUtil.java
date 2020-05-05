@@ -77,14 +77,19 @@ public class FileUtil {
     }
 
     public static Map<String, String> arguments(String[] args) {
+        String argDelitter = "=";
         Map<String, String> argMap = new HashMap<>();
         String key, value;
         for (String s : args) {
-            String[] param = s.split("=");
-            key = param[0].trim();
-            value = param[1].trim();
-            if (!key.isEmpty() && !value.isEmpty()) {
-                argMap.put(key, value);
+            String[] param = s.split(argDelitter);
+            key = param[0];
+            try {
+                value = param[1];
+            } catch (IndexOutOfBoundsException e) {
+                value = "";
+            }
+            if (!key.isEmpty()) {
+                argMap.put(key.trim(), value.trim());
             }
         }
         return argMap;
