@@ -1,12 +1,12 @@
-apply plugin: 'java'
-apply plugin: 'application'
-apply plugin: 'jacoco'
+plugins {
+    id 'java'
+    id 'java-library'
+    id 'jacoco'
+    id "org.sonarqube" version "2.6"
+}
 
-mainClassName = 'TestDataGenerator'
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-version = '1.0'
 group = 'org.masty.tdg'
+version = '1.0'
 
 repositories {
     mavenCentral()
@@ -24,13 +24,14 @@ jacoco {
 test {
     finalizedBy jacocoTestReport // report is always generated after tests run
 }
+
 jacocoTestReport {
     dependsOn test // tests are required to run before generating the report
 }
 
 task customFatJar(type: Jar) {
     manifest {
-        attributes 'Main-Class': 'TestDataGenerator'
+        attributes 'Main-Class': 'org.masty.util.TestDataGenerator'
     }
     baseName = 'test-data-generator'
     exclude 'META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA'

@@ -3,6 +3,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.masty.util.FileUtil;
+import org.masty.util.TestDataGenerator;
 
 import java.io.File;
 import java.util.*;
@@ -112,15 +113,15 @@ public class TestDataGeneratorTest {
         file2.delete();
     }
 
-    @Ignore
-    public void testMillionsOfHexIps() {
+    @Test
+    public void testMillionOfHexIps() {
         long start, stop, time;
-        int[] testCount = {1_000_000, 2_000_000, 5_000_000, 10_000_000};
+        int[] lineCount = {500000, 1_000_000};
         String[][] allargs = {{"count="},
                 {"count=", "decimalIp=true"},
                 {"count=", "decimalIp=true", "binaryIp=true"}};
         for (String[] args : allargs) {
-            for (int count : testCount) {
+            for (int count : lineCount) {
                 args[0] = "count=" + count;
                 start = System.currentTimeMillis();
                 String test1File = tdg.generateFlatFile(args);

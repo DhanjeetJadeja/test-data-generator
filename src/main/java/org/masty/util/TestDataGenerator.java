@@ -1,20 +1,26 @@
-import org.masty.util.FileUtil;
+package org.masty.util;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class TestDataGenerator {
+    private static final Logger logger = Logger.getLogger(TestDataGenerator.class.getName());
     static List<String> ips;
 
     public static void main(String[] args) {
         TestDataGenerator tdg = new TestDataGenerator();
-        long start = System.currentTimeMillis(), stop;
+        long start = System.currentTimeMillis();
+        logger.log(Level.INFO, String.format("TestDataGenerator started on - %d", start));
         String fileName = tdg.generateFlatFile(args);
-        stop = System.currentTimeMillis();
-        System.out.println("~~ Success ~~ !!");
-        System.out.println("Test Data Generator generated " + ips.size() + " IPs in " + fileName + " taking " + (stop - start) + " ms");
+        long stop = System.currentTimeMillis();
+        logger.log(Level.INFO, String.format("Success!! %d", stop));
+        logger.log(Level.INFO,
+                String.format("Test Data Generator generated %d IPs in %s taking %d ms", ips.size(), fileName,
+                        (stop - start)));
     }
 
     public String generateFlatFile(String... args) {
@@ -22,21 +28,29 @@ public class TestDataGenerator {
         Map<String, String> arguments = FileUtil.arguments(args);
         short[] from = new short[4];
         short[] to = new short[4];
-        short i, j, k, l;
+        short i;
+        short j;
+        short k;
+        short l;
         Properties prop = new Properties();
         String confFile = resolveStringArgument(arguments, prop, "config", "tdg.properties");
         if (null == prop) prop = FileUtil.readProperties(confFile);
 
         String[] octets = {"first", "second", "third", "fourth"};
-        short defaultFrom = 1, defaultTo = 254;
+        short defaultFrom = 1;
+        short defaultTo = 254;
         String defaultDelimiter = ":";
         int count = defaultFrom;
 
-        String c = "", line = "", ipDecimal = "", ipHex = "", ipBinary = "";
-        boolean finerIps = arguments.get("finerIps") != null ? Boolean.parseBoolean(arguments.get("finerIps")) :
-                prop.getProperty("finerIps") != null && Boolean.parseBoolean(prop.getProperty("finerIps"));
+        String c = "";
+        String line = "";
+        String ipDecimal = "";
+        String ipHex = "";
+        String ipBinary = "";
 
-        int ROW_COUNT = resolveIntegerArgument(arguments, prop, "count", 1_000_000);
+        boolean finerIps = resolveBooleanArgument(arguments, prop, "finerIps", false);
+
+        int lineCount = resolveIntegerArgument(arguments, prop, "count", 1_000_000);
         String delimiter = resolveStringArgument(arguments, prop, "delimiter", defaultDelimiter);
 
         if (finerIps) {
@@ -63,7 +77,7 @@ public class TestDataGenerator {
             for (j = from[1]; j <= to[1]; j++) {
                 for (k = from[2]; k <= to[2]; k++) {
                     for (l = from[3]; l <= to[3]; l++) {
-                        if (count <= ROW_COUNT) {
+                        if (count <= lineCount) {
                             line = "";
                             if (index) {
                                 c = String.format("%08d", count++);
@@ -83,7 +97,7 @@ public class TestDataGenerator {
                                 ipBinary = getBinaryIp(i, j, k, l);
                                 line = line + ipBinary + delimiter;
                             }
-                            line = line.substring(0, line.length() - delimiter.length()) + "\n";
+                            line = line.substring(0, line.length() - delimiter.length());
                             ips.add(line);
                         } else {
                             break;
@@ -116,7 +130,10 @@ public class TestDataGenerator {
     }
 
     public String getBinaryIp(short i, short j, short k, short l) {
-        String first, second, third, fourth;
+        String first;
+        String second;
+        String third;
+        String fourth;
         first = Integer.toBinaryString(i);
         second = Integer.toBinaryString(j);
         third = Integer.toBinaryString(k);
@@ -129,7 +146,10 @@ public class TestDataGenerator {
     }
 
     public String getHexIp(short i, short j, short k, short l) {
-        String first, second, third, fourth;
+        String first;
+        String second;
+        String third;
+        String fourth;
         first = Integer.toHexString(i);
         second = Integer.toHexString(j);
         third = Integer.toHexString(k);
