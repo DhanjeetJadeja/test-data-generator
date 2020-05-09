@@ -160,7 +160,7 @@ public class TestDataGenerator {
         third = third.length() == 1 ? "0" + third : third;
         fourth = fourth.length() == 1 ? "0" + fourth : fourth;
 
-        return first + second + third + fourth;
+        return "0x" + first + second + third + fourth;
     }
 
     public String getDecimalIp(short i, short j, short k, short l) {

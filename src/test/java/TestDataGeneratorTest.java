@@ -21,7 +21,7 @@ public class TestDataGeneratorTest {
         short i = 192, j = 168, k = 1, l = 254;
         Assert.assertEquals("192.168.1.254", tdg.getDecimalIp(i, j, k, l));
         Assert.assertEquals("        11000000.        10101000.               1.        11111110", tdg.getBinaryIp(i, j, k, l));
-        Assert.assertEquals("c0a801fe", tdg.getHexIp(i, j, k, l));
+        Assert.assertEquals("0xc0a801fe", tdg.getHexIp(i, j, k, l));
     }
 
     @Test
@@ -83,8 +83,10 @@ public class TestDataGeneratorTest {
         File file = new File(test1File);
         List<String> lines = FileUtil.read(test1File);
         Assert.assertEquals(2, lines.size());
-        Assert.assertEquals("00000001:1.2.3.4:01020304:               1.              10.              11.             100", lines.get(0));
-        Assert.assertEquals("00000002:1.2.3.5:01020305:               1.              10.              11.             101", lines.get(1));
+        Assert.assertEquals("00000001:1.2.3.4:0x01020304:               1.              10.              11.         " +
+                "    100", lines.get(0));
+        Assert.assertEquals("00000002:1.2.3.5:0x01020305:               1.              10.              11.         " +
+                "    101", lines.get(1));
         file.delete();
     }
 
@@ -104,11 +106,17 @@ public class TestDataGeneratorTest {
         List<String> lines2 = FileUtil.read(test2File);
         Assert.assertEquals(1, lines1.size());
         Assert.assertEquals(2, lines2.size());
-        Assert.assertEquals("00000001:1.1.1.1:01010101:               1.               1.               1.               1", lines1.get(0));
-        Assert.assertEquals("00000001:1.1.1.1:01010101:               1.               1.               1.               1", lines2.get(0));
-        Assert.assertEquals("00000002:1.1.1.2:01010102:               1.               1.               1.              10", lines2.get(1));
-        Assert.assertEquals(94, file1.length());
-        Assert.assertEquals(188, file2.length());
+        Assert.assertEquals("00000001:1.1.1.1:0x01010101:               1.               1.               1.         " +
+                " " +
+                "     1", lines1.get(0));
+        Assert.assertEquals("00000001:1.1.1.1:0x01010101:               1.               1.               1.         " +
+                " " +
+                "     1", lines2.get(0));
+        Assert.assertEquals("00000002:1.1.1.2:0x01010102:               1.               1.               1.         " +
+                " " +
+                "    10", lines2.get(1));
+        Assert.assertEquals(96, file1.length());
+        Assert.assertEquals(192, file2.length());
         file1.delete();
         file2.delete();
     }
