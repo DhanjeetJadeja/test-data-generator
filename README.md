@@ -1,5 +1,5 @@
 # test-data-generator
-Test data determines to Quality of Tests, Environments, Products, Services and Platforms. Over the years we have sufficed with Excel, Shell (bash, sed, awk) scripts, SQL Queries etc. for Test Data. An attempt to simplify the test-data-generation with this..
+Test data determines the Quality of Tests, Environments, Products, Services and Platforms. Over the years we have sufficed with Excel, Shell (bash, sed, awk) scripts, SQL Queries etc. for Test Data. An attempt to simplify the test-data-generation with this..
 
 ## We need a csv file containing unique IPv4,Hex or Decimal IP addresses.
 
