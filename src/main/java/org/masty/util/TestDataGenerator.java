@@ -13,13 +13,13 @@ public class TestDataGenerator {
 
     public static void main(String[] args) {
         TestDataGenerator tdg = new TestDataGenerator();
-        long start = System.currentTimeMillis();
+        long start = System.nanoTime();
         logger.log(Level.INFO, String.format("TestDataGenerator started on - %d", start));
         String fileName = tdg.generateFlatFile(args);
-        long stop = System.currentTimeMillis();
+        long stop = System.nanoTime();
         logger.log(Level.INFO, String.format("Success!! %d", stop));
         logger.log(Level.INFO,
-                String.format("Test Data Generator generated %d IPs in %s taking %d ms", ips.size(), fileName,
+                String.format("Test Data Generator generated %d IPs in %s taking %d ns", ips.size(), fileName,
                         (stop - start)));
     }
 

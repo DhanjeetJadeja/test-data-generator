@@ -6,25 +6,28 @@ Test data determines the Quality of Tests, Environments, Products, Services and 
 This works like below
 
 ```
-$ java -jar test-data-generator-1.0.jar from=192 to=255 count=10 index=true
-Reading properties from tdg.properties
-~~ Success ~~ !!
-Test Data Generator generated 10 IPs in tdg-op-1588717553131.csv taking 49 ms
+$ java -jar tdg-1.0.jar from=192 to=255 count=10 index=true
+Dec 12, 2022 10:16:51 PM org.masty.util.TestDataGenerator main
+INFO: TestDataGenerator started on - 172686104315250
+Dec 12, 2022 10:16:51 PM org.masty.util.TestDataGenerator main
+INFO: Success!! 172686138403833
+Dec 12, 2022 10:16:51 PM org.masty.util.TestDataGenerator main
+INFO: Test Data Generator generated 10 IPs in tdg-op-1670883411846.csv taking 34088583 ns
 ```
 ## Lets look at the file.
 
 ```
-$ cat tdg-op-1588717553131.csv 
-00000001,c0a80101
-00000002,c0a80102
-00000003,c0a80103
-00000004,c0a80104
-00000005,c0a80105
-00000006,c0a80106
-00000007,c0a80107
-00000008,c0a80108
-00000009,c0a80109
-00000010,c0a8010a
+$ cat cat tdg-op-1670883411846.csv 
+00000001:0xc0c0c0c0
+00000002:0xc0c0c0c1
+00000003:0xc0c0c0c2
+00000004:0xc0c0c0c3
+00000005:0xc0c0c0c4
+00000006:0xc0c0c0c5
+00000007:0xc0c0c0c6
+00000008:0xc0c0c0c7
+00000009:0xc0c0c0c8
+00000010:0xc0c0c0c9
 ```
 
 ## Lets see the configurable flags in the properties
@@ -68,24 +71,27 @@ delimiter=:
 
 ## File Size and Writing Time Metrics
 ```
-1000 IPs in tdg-op-1588719333640.csv took 91 ms	File Size 9000 bytes	arguments[count=1000]
-2000 IPs in tdg-op-1588719333887.csv took 223 ms	File Size 18000 bytes	arguments[count=2000]
-5000 IPs in tdg-op-1588719334109.csv took 220 ms	File Size 45000 bytes	arguments[count=5000]
-10000 IPs in tdg-op-1588719334398.csv took 208 ms	File Size 90000 bytes	arguments[count=10000]
-100000 IPs in tdg-op-1588719334595.csv took 220 ms	File Size 900000 bytes	arguments[count=100000]
-1000000 IPs in tdg-op-1588719335202.csv took 747 ms	File Size 9000000 bytes	arguments[count=1000000]
-1000 IPs in tdg-op-1588719335758.csv took 202 ms	File Size 18568 bytes	arguments[count=1000, decimalIp=true]
-2000 IPs in tdg-op-1588719335902.csv took 142 ms	File Size 37136 bytes	arguments[count=2000, decimalIp=true]
-5000 IPs in tdg-op-1588719336002.csv took 101 ms	File Size 95554 bytes	arguments[count=5000, decimalIp=true]
-10000 IPs in tdg-op-1588719336107.csv took 103 ms	File Size 193399 bytes	arguments[count=10000, decimalIp=true]
-100000 IPs in tdg-op-1588719336256.csv took 158 ms	File Size 2002584 bytes	arguments[count=100000, decimalIp=true]
-1000000 IPs in tdg-op-1588719337166.csv took 1345 ms	File Size 20555244 bytes	arguments[count=1000000, decimalIp=true]
-1000 IPs in tdg-op-1588719337925.csv took 166 ms	File Size 86568 bytes	arguments[count=1000, decimalIp=true, binaryIp=true]
-2000 IPs in tdg-op-1588719338077.csv took 150 ms	File Size 173136 bytes	arguments[count=2000, decimalIp=true, binaryIp=true]
-5000 IPs in tdg-op-1588719338297.csv took 221 ms	File Size 435554 bytes	arguments[count=5000, decimalIp=true, binaryIp=true]
-10000 IPs in tdg-op-1588719338546.csv took 247 ms	File Size 873399 bytes	arguments[count=10000, decimalIp=true, binaryIp=true]
-100000 IPs in tdg-op-1588719339407.csv took 922 ms	File Size 8802584 bytes	arguments[count=100000, decimalIp=true, binaryIp=true]
-1000000 IPs in tdg-op-1588719346217.csv took 9740 ms	File Size 88555244 bytes	arguments[count=1000000, decimalIp=true, binaryIp=true]
+1000 IPs in tdg-op-1670883350331.csv took 46710417 ns	File Size 11000 bytes	arguments[count=1000]
+2000 IPs in tdg-op-1670883350382.csv took 44942541 ns	File Size 22000 bytes	arguments[count=2000]
+5000 IPs in tdg-op-1670883350427.csv took 44552083 ns	File Size 55000 bytes	arguments[count=5000]
+10000 IPs in tdg-op-1670883350473.csv took 44814708 ns	File Size 110000 bytes	arguments[count=10000]
+100000 IPs in tdg-op-1670883350501.csv took 33051458 ns	File Size 1100000 bytes	arguments[count=100000]
+500000 IPs in tdg-op-1670883350581.csv took 98600334 ns	File Size 5500000 bytes	arguments[count=500000]
+1000000 IPs in tdg-op-1670883350780.csv took 181440584 ns	File Size 11000000 bytes	arguments[count=1000000]
+1000 IPs in tdg-op-1670883350901.csv took 34472708 ns	File Size 20568 bytes	arguments[count=1000, decimalIp=true]
+2000 IPs in tdg-op-1670883350934.csv took 32394584 ns	File Size 41136 bytes	arguments[count=2000, decimalIp=true]
+5000 IPs in tdg-op-1670883350968.csv took 33904292 ns	File Size 105554 bytes	arguments[count=5000, decimalIp=true]
+10000 IPs in tdg-op-1670883351003.csv took 35877042 ns	File Size 213399 bytes	arguments[count=10000, decimalIp=true]
+100000 IPs in tdg-op-1670883351072.csv took 76179792 ns	File Size 2202584 bytes	arguments[count=100000, decimalIp=true]
+500000 IPs in tdg-op-1670883351231.csv took 163506625 ns	File Size 11067892 bytes	arguments[count=500000, decimalIp=true]
+1000000 IPs in tdg-op-1670883351513.csv took 277781417 ns	File Size 22555244 bytes	arguments[count=1000000, decimalIp=true]
+1000 IPs in tdg-op-1670883351628.csv took 43491667 ns	File Size 88568 bytes	arguments[count=1000, decimalIp=true, binaryIp=true]
+2000 IPs in tdg-op-1670883351666.csv took 37171250 ns	File Size 177136 bytes	arguments[count=2000, decimalIp=true, binaryIp=true]
+5000 IPs in tdg-op-1670883351707.csv took 41503167 ns	File Size 445554 bytes	arguments[count=5000, decimalIp=true, binaryIp=true]
+10000 IPs in tdg-op-1670883351755.csv took 47796792 ns	File Size 893399 bytes	arguments[count=10000, decimalIp=true, binaryIp=true]
+100000 IPs in tdg-op-1670883351953.csv took 207491083 ns	File Size 9002584 bytes	arguments[count=100000, decimalIp=true, binaryIp=true]
+500000 IPs in tdg-op-1670883352599.csv took 676326375 ns	File Size 45067892 bytes	arguments[count=500000, decimalIp=true, binaryIp=true]
+1000000 IPs in tdg-op-1670883353934.csv took 1350554292 ns	File Size 90555244 bytes	arguments[count=1000000, decimalIp=true, binaryIp=true]
 ```
 
 # Future Diversified Improvements

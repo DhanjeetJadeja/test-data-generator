@@ -124,21 +124,21 @@ public class TestDataGeneratorTest {
     @Test
     public void testMillionOfHexIps() {
         long start, stop, time;
-        int[] lineCount = {500000, 1_000_000};
+        int[] lineCount = {1000, 2000, 5000, 10000, 100000, 500000, 1_000_000};
         String[][] allargs = {{"count="},
                 {"count=", "decimalIp=true"},
                 {"count=", "decimalIp=true", "binaryIp=true"}};
         for (String[] args : allargs) {
             for (int count : lineCount) {
                 args[0] = "count=" + count;
-                start = System.currentTimeMillis();
+                start = System.nanoTime();
                 String test1File = tdg.generateFlatFile(args);
-                stop = System.currentTimeMillis();
+                stop = System.nanoTime();
                 time = stop - start;
                 File file = new File(test1File);
                 List<String> lines = FileUtil.read(test1File);
                 Assert.assertEquals(count, lines.size());
-                System.out.println(count + " IPs in " + file.getName() + " took " + time + " ms\tFile Size " + file.length() +
+                System.out.println(count + " IPs in " + file.getName() + " took " + time + " ns\tFile Size " + file.length() +
                         " bytes\targuments" + Arrays.toString(args));
                 file.delete();
             }
